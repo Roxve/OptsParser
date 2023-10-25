@@ -1,6 +1,6 @@
 # OptsParser
 an option parser for nim
-_*(for now it cannot parse)*_
+*(for now it cannot parse)*
 
 ## Example 1
 ```nim
@@ -22,9 +22,10 @@ the colmunSize and spaceSize args in makeOptParser
 control how the options is showen each option has 13 chars space of text and after it is 2 spaces to spilt it with
 the other option (only useful if the option is 13 chars long if not the remaning chars are going to be replaced with spaces)
 output:
-```nm
+```bash
 ptVoid parser!
 -s             --say          text to say
 -l             --loudly       says it loudly
--s                            short only!```
+-s                            short only!
+```
 
