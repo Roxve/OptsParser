@@ -3,7 +3,7 @@ an option parser for nim
 _*(for now it cannot parse)*_
 
 ## Example 1
-```ni
+```nim
 var eParser = makeOptParser(13, 2):
     setBanner("ptVoid parser!")
     addOpt("-s", "--say", "text to say"):
@@ -16,4 +16,4 @@ var eParser = makeOptParser(13, 2):
     addOpt("?s", "?secert", ""):
       echo "you found the secert option"
 
-`````````
+```
