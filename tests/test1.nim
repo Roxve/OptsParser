@@ -12,7 +12,7 @@ test "can work":
   var loud = false;
   var text = "hi";
 
-  var eParser = makeOptParser(13, 2):
+  var eParser = makeOptParser(colmunSize=13, spaceSize=2):
     setBanner("ptVoid parser!")
     addOpt("-s", "--say", "text to say"):
       text = "passed"
