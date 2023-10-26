@@ -4,7 +4,7 @@
 # the letter 't').
 #
 # To run these tests, simply execute `nimble test`.
-
+import os
 import unittest
 import sugar
 import OptsParser
@@ -24,5 +24,5 @@ test "can work":
     addOpt("?s", "?secert", ""):
       echo "you found the secert option"
   eParser.showOpts()
-  eParser.parse()
+  eParser.parse(@["-s", "'Hello, world'", "-l", "127", "?s"])
   check true

@@ -91,7 +91,7 @@ proc tokenize(args = progArgs): seq[Token] =
     case arg[pos]:
       of '1','2','3','4','5', '6', '7', '8', '9', '0':
         var res = "";
-        while isNum(arg[pos]):
+        while arg.len > pos and isNum(arg[pos]):
           res = res & arg[pos]
           pos = pos + 1
         tokens.add(newToken(res, TType.Number, x))
@@ -99,6 +99,7 @@ proc tokenize(args = progArgs): seq[Token] =
         var res = ""
         while arg.len > pos:
           res= res & arg[pos]
+          pos = pos + 1
         tokens.add(newToken(res, TType.Opt, x))
   return tokens
 
