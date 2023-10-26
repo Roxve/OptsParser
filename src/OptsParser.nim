@@ -1,4 +1,5 @@
 import sugar
+import os
 type ParserException = object of ValueError
 
 
@@ -60,3 +61,32 @@ proc setBanner*(self: OptsParser,ubanner: string): OptsParser =
   self.banner = ubanner
   return self
 
+
+var progArgs = commandLineParams()
+type
+  TType = enum
+    Opt,
+    String,
+    Number,
+    Error
+  Token = ref object
+    value: string
+    ttype: TType
+    num: int
+proc newToken(value: string, ttype: TType, num: int): Token = 
+  return Token(value: value, ttype: ttype, num: num)
+proc tokenize(args = progArgs): seq[Token] =
+  var tokens: seq[Token] = @[]
+  var x = 0
+  for arg in args:
+    x = x + 1
+    var pos = 0
+    case arg[pos]:
+      of 'A':
+        tokens.add(newToken("A", TType.Opt, x))
+      else:
+        echo "err"
+  return tokens
+
+proc parse*(self: OptsParser, args=progArgs) =
+  var tokens = tokenize(args)
