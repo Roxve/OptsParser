@@ -24,4 +24,5 @@ test "can work":
     addOpt("?s", "?secert", ""):
       echo "you found the secert option"
   eParser.showOpts()
+  eParser.parse()
   check true
