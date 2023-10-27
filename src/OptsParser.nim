@@ -1,6 +1,6 @@
 import sugar
 import os
-type ParserException = object of ValueError
+type ParserException = object of CatchableError
 
 
 var progArgs = commandLineParams()
@@ -108,3 +108,29 @@ proc parse*(self: OptsParser, args=progArgs) =
   for token in tokens:
     echo "=> ", token.value
     echo "=> ", token.ttype
+
+  var optLoop = 0
+  for opt in self.opts:
+    optLoop = optLoop + 1
+    var tokenPos = 0
+    while tokens.len >= tokenPos:
+      var requires_val = false
+      var flag
+      if opt.flag.contains(':'):
+        opt.flag = opt.flag.substr(opt.value.find(':'))
+        requires_val = true
+      elif opt.longflag.contains(':'):
+        opt.longflag = opt.longflag.substr(opt.value.find(':'))
+        requires_val = true
+
+      if tokens[tokenPos].ttype == TType.Opt and (tokens[tokenPos].value == opt.flag or tokens[tokenPos].value == opt.longflag):
+        if requires_val:
+          if tokens.len >= tokenPos and tokens[tokenPos+1].ttype != TType.Opt:
+            tokenPos = tokenPos + 1
+            opt.code(tokens[tokenPos])
+          else:
+            raise ParserException("required value after " & opt.value);
+        else: 
+          discard opt.code(tokens[tokenPos])
+      tokenPos = tokenPos + 1
+

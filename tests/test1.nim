@@ -6,6 +6,7 @@
 # To run these tests, simply execute `nimble test`.
 import os
 import unittest
+import strutils
 import sugar
 import OptsParser
 test "can work":
@@ -23,6 +24,10 @@ test "can work":
     # empty info means its hidden in showOpts
     addOpt("?s", "?secert", ""):
       echo "you found the secert option"
-  eParser.showOpts()
-  eParser.parse(@["-s", "'Hello, world'", "-l", "127", "?s"])
+  eParser.showOpts() 
+  eParser.parse(@["-s", "'Hello, world'", "127", "?s"])
+  if loud:
+    echo text.toUpper();
+  else:
+    echo text.toLower()
   check true
