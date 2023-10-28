@@ -6,8 +6,8 @@ an option parser for nim
 ```nim
 var eParser = makeOptParser(colmunSize=13, spaceSize=2):
     setBanner("ptVoid parser!")
-    addOpt("-s", "--say", "text to say"):
-      text = "passed"
+    addOpt("-s:text", "--say:text", "text to say"):
+      text = item.value
     addOpt("-l", "--loudly", "says it loudly"):
       loud = true
     addOpt("-s", "", "short only!"):
@@ -15,7 +15,12 @@ var eParser = makeOptParser(colmunSize=13, spaceSize=2):
     # empty info means its hidden in showOpts
     addOpt("?s", "?secert", ""):
       echo "you found the secert option"
-  eParser.showOpts()
+  eParser.showOpts() 
+  eParser.parse(@["-s", "'Hello, world'", "127", "?s", "-l"])
+  if loud:
+    echo text.toUpper();
+  else:
+    echo text.toLower()
 ``````
 the showOpts() proc echoes the options with their info
 the colmunSize and spaceSize args in makeOptParser
