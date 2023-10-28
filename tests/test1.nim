@@ -15,8 +15,8 @@ test "can work":
 
   var eParser = makeOptParser(colmunSize=13, spaceSize=2):
     setBanner("ptVoid parser!")
-    addOpt("-s", "--say", "text to say"):
-      text = "passed"
+    addOpt("-s:text", "--say:text", "text to say"):
+      text = item.value
     addOpt("-l", "--loudly", "says it loudly"):
       loud = true
     addOpt("-s", "", "short only!"):
@@ -25,7 +25,7 @@ test "can work":
     addOpt("?s", "?secert", ""):
       echo "you found the secert option"
   eParser.showOpts() 
-  eParser.parse(@["-s", "'Hello, world'", "127", "?s"])
+  eParser.parse(@["-s", "'Hello, world'", "127", "?s", "-l"])
   if loud:
     echo text.toUpper();
   else:

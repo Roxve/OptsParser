@@ -9,6 +9,7 @@ type
     Opt,
     String,
     Number,
+    Value,
     Error
   Token = ref object
     value: string
@@ -95,12 +96,19 @@ proc tokenize(args = progArgs): seq[Token] =
           res = res & arg[pos]
           pos = pos + 1
         tokens.add(newToken(res, TType.Number, x))
-      else:
+      of '-', '?':
         var res = ""
         while arg.len > pos:
           res= res & arg[pos]
           pos = pos + 1
         tokens.add(newToken(res, TType.Opt, x))
+
+      else:
+        var res = ""
+        while arg.len > pos:
+          res= res & arg[pos]
+          pos = pos + 1
+        tokens.add(newToken(res, TType.Value, x))
   return tokens
 
 proc parse*(self: OptsParser, args=progArgs) =
@@ -113,23 +121,24 @@ proc parse*(self: OptsParser, args=progArgs) =
   for opt in self.opts:
     optLoop = optLoop + 1
     var tokenPos = 0
-    while tokens.len >= tokenPos:
-      var requires_val = false
-      var flag
-      if opt.flag.contains(':'):
-        opt.flag = opt.flag.substr(opt.value.find(':'))
-        requires_val = true
-      elif opt.longflag.contains(':'):
-        opt.longflag = opt.longflag.substr(opt.value.find(':'))
+    var flag = opt.flag
+    var lflag = opt.longflag
+    var requires_val = false
+    if flag.contains(':'):
+      flag = flag.substr(0, flag.find(':') - 1)
+      requires_val = true
+    if lflag.contains(':'):
+        lflag = lflag.substr(0,flag.find(':') - 1)
         requires_val = true
 
-      if tokens[tokenPos].ttype == TType.Opt and (tokens[tokenPos].value == opt.flag or tokens[tokenPos].value == opt.longflag):
+    while tokens.len > tokenPos:
+      if tokens[tokenPos].ttype == TType.Opt and (tokens[tokenPos].value == flag or tokens[tokenPos].value == lflag):
         if requires_val:
           if tokens.len >= tokenPos and tokens[tokenPos+1].ttype != TType.Opt:
             tokenPos = tokenPos + 1
             opt.code(tokens[tokenPos])
           else:
-            raise ParserException("required value after " & opt.value);
+            raise ParserException.newException("required value after " & flag);
         else: 
           discard opt.code(tokens[tokenPos])
       tokenPos = tokenPos + 1
